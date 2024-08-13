@@ -1,5 +1,12 @@
 # Emotion Detection Application
 
+## Team Members-
+
+- Bhowmik Doshi (100891425)
+- Dixit Patel (100893847)
+- Meharan Shaikh (100896426)
+- Sanchit Kalra (100901585)
+
 ## Overview
 
 This is a web-based application that detects emotions from images using a pre-trained deep learning model. The application provides a simple user interface where users can upload an image, and the model will analyze the image to determine the emotion displayed by the person in the image. Additionally, there is a real-time emotion detection feature that uses the user's webcam to detect emotions in real time.
