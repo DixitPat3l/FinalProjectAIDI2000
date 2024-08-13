@@ -12,7 +12,6 @@
     <!-- Page Wrapper -->
     <div id="page-wrapper">
 
-        <!-- Header -->
         <header id="header">
             <nav id="nav">
                 <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
@@ -22,7 +21,7 @@
             </nav>
         </header>
 
-        <!-- Main -->
+        <!-- Main Section -->
         <section id="main" class="wrapper">
             <div class="inner">
                 <header class="major">
@@ -30,10 +29,8 @@
                     <p>Use your webcam to detect emotions in real-time.</p>
                 </header>
                 <div class="content">
-                    <video id="webcam" autoplay playsinline style="border-radius: 10px;"></video>
-                    <canvas id="canvas" style="display: none;"></canvas>
-                    <div id="results" class="results-card" style="margin-top: 20px; padding: 20px; border-radius: 10px;">
-                        <!-- Emotion results will appear here -->
+                    <div class="video-wrapper" style="display: flex; justify-content: center; align-items: center;">
+                        <img src="{{ url_for('video_feed') }}" id="video_feed" alt="Webcam Feed" style="max-width: 70%; height: auto; border-radius: 10px; border: 3px solid #333;">
                     </div>
                 </div>
             </div>
@@ -46,50 +43,5 @@
     <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
     <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
-    <script>
-        const webcam = document.getElementById('webcam');
-        const canvas = document.getElementById('canvas');
-        const resultsDiv = document.getElementById('results');
-
-        // Access the webcam
-        navigator.mediaDevices.getUserMedia({ video: true })
-            .then(stream => {
-                webcam.srcObject = stream;
-            })
-            .catch(console.error);
-
-        // Capture and send frame every 500ms
-        setInterval(() => {
-            const context = canvas.getContext('2d');
-            canvas.width = webcam.videoWidth;
-            canvas.height = webcam.videoHeight;
-            context.drawImage(webcam, 0, 0, canvas.width, canvas.height);
-
-            const imageData = canvas.toDataURL('image/jpeg');
-            detectEmotion(imageData);
-        }, 500);
-
-        function detectEmotion(imageData) {
-            fetch('/upload', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ image: imageData })
-            })
-            .then(response => response.json())
-            .then(data => {
-                resultsDiv.innerHTML = '';
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = '<p>No emotions detected.</p>';
-                } else {
-                    data.forEach(emotion => {
-                        resultsDiv.innerHTML += `<p style="font-weight: bold; font-size: 1.2em; color: #ffffff;">${emotion.emotion}: ${emotion.confidence}</p>`;
-                    });
-                }
-            })
-            .catch(console.error);
-        }
-    </script>
 </body>
 </html>

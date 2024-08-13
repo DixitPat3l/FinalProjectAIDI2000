@@ -21,7 +21,7 @@
             </nav>
         </header>
 
-        <!-- Main -->
+        <!-- Main Section -->
         <section id="main" class="wrapper">
             <div class="inner">
                 <header class="major">
@@ -65,32 +65,36 @@
             reader.onload = (e) => {
                 uploadedImage.src = e.target.result;
                 uploadedImage.style.display = 'block';
-                detectEmotion(file);
+                detectEmotion(e.target.result);
             };
 
             reader.readAsDataURL(file);
         });
 
-        function detectEmotion(file) {
-            const formData = new FormData();
-            formData.append('file', file);
-
-            // Dynamically get the host URL
+        function detectEmotion(imageData) {
             const url = `${window.location.origin}/upload`;
 
             fetch(url, {
                 method: 'POST',
-                body: formData
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ image: imageData })
             })
             .then(response => response.json())
             .then(data => {
                 resultsDiv.innerHTML = '';
-                if (data.length === 0) {
-                    resultsDiv.innerHTML = '<p>No emotions detected.</p>';
+                if (data.error) {
+                    resultsDiv.innerHTML = `<p>Error: ${data.error}</p>`;
                 } else {
-                    data.forEach(emotion => {
-                        resultsDiv.innerHTML += `<p style="font-weight: bold; font-size: 1.2em; color: #ffffff;">${emotion.emotion}: ${emotion.confidence}</p>`;
-                    });
+                    uploadedImage.src = 'data:image/jpeg;base64,' + data.processed_image;
+                    if (data.emotions.length === 0) {
+                        resultsDiv.innerHTML = '<p>No emotions detected.</p>';
+                    } else {
+                        data.emotions.forEach(emotion => {
+                            resultsDiv.innerHTML += `<p style="font-weight: bold; font-size: 1.2em; color: #ffffff;">${emotion.emotion}: ${emotion.confidence}</p>`;
+                        });
+                    }
                 }
             })
             .catch(error => console.error('Error:', error));
