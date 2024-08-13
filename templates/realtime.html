@@ -1,45 +1,57 @@
 <!DOCTYPE HTML>
 <html>
-    <head>
-        <title>Real-Time Emotion Detection</title>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
-        <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
-        <noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
-    </head>
-    <body class="is-preload">
+<head>
+    <title>Real-Time Emotion Detection</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+    <noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
+    <style>
+        #videoFeed {
+            width: 640px;
+            height: 480px;
+            border-radius: 10px;
+            background-color: #1c1c1c; /* Dark background in case of no video feed */
+        }
+    </style>
+</head>
+<body class="is-preload">
 
-        <!-- Page Wrapper -->
-        <div id="page-wrapper">
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
 
-            <!-- Header -->
-<header id="header">
-    <nav id="nav">
-        <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
-            <li style="margin-right: 20px;"><a href="/">Image Emotion Detection</a></li>
-            <li><a href="/realtime">Real-Time Emotion Detection</a></li>
-        </ul>
-    </nav>
-</header>
+        <!-- Header -->
+        <header id="header">
+            <nav id="nav">
+                <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
+                    <li style="margin-right: 20px;"><a href="/">Image Emotion Detection</a></li>
+                    <li><a href="/realtime">Real-Time Emotion Detection</a></li>
+                </ul>
+            </nav>
+        </header>
 
-            <!-- Main -->
-            <section id="main" class="wrapper">
-                <div class="inner">
-                    <header class="major">
-                        <h2>Real-Time Emotion Detection</h2>
-                    </header>
-                    <div class="video-card">
-                        <img src="{{ url_for('video_feed') }}" id="video_feed" alt="Webcam Feed">
+        <!-- Main -->
+        <section id="main" class="wrapper">
+            <div class="inner">
+                <header class="major">
+                    <h2>Real-Time Emotion Detection</h2>
+                    <p>Use your webcam to detect emotions in real-time.</p>
+                </header>
+                <div class="content">
+                    <div id="videoContainer" style="display: flex; justify-content: center; align-items: center;">
+                        <img id="videoFeed" src="{{ url_for('video_feed') }}" alt="Webcam Feed">
                     </div>
                 </div>
-            </section>
-        </div>
+            </div>
+        </section>
+    </div>
 
-        <!-- Scripts -->
-        <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
-        <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
-        <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
-    </body>
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+
+</body>
 </html>

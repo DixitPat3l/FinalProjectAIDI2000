@@ -13,13 +13,13 @@
     <div id="page-wrapper">
 
         <header id="header">
-    <nav id="nav">
-        <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
-            <li style="margin-right: 20px;"><a href="/">Image Emotion Detection</a></li>
-            <li><a href="/realtime">Real-Time Emotion Detection</a></li>
-        </ul>
-    </nav>
-</header>
+            <nav id="nav">
+                <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
+                    <li style="margin-right: 20px;"><a href="/">Image Emotion Detection</a></li>
+                    <li><a href="/realtime">Real-Time Emotion Detection</a></li>
+                </ul>
+            </nav>
+        </header>
 
         <!-- Main -->
         <section id="main" class="wrapper">
@@ -75,7 +75,10 @@
             const formData = new FormData();
             formData.append('file', file);
 
-            fetch('http://127.0.0.1:5000/upload', {
+            // Dynamically get the host URL
+            const url = `${window.location.origin}/upload`;
+
+            fetch(url, {
                 method: 'POST',
                 body: formData
             })

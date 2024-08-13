@@ -61,8 +61,7 @@ def upload():
     if file.filename == '':
         return jsonify({"error": "No selected file"})
 
-    file.save("uploaded_image.jpg")
-    image = cv2.imread("uploaded_image.jpg")
+    image = cv2.imdecode(np.frombuffer(file.read(), np.uint8), cv2.IMREAD_COLOR)
     emotions = detect_emotion(image)
 
     return jsonify(emotions)
@@ -70,9 +69,14 @@ def upload():
 
 def gen():
     cap = cv2.VideoCapture(0)
+    if not cap.isOpened():
+        print("Error: Could not open video device.")
+        return
+
     while True:
         ret, frame = cap.read()
         if not ret:
+            print("Error: Could not read frame.")
             break
 
         # Mirror the frame
@@ -86,9 +90,15 @@ def gen():
             cv2.putText(frame, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.9, (36, 255, 12), 2)
 
         ret, jpeg = cv2.imencode('.jpg', frame)
+        if not ret:
+            print("Error: Could not encode frame.")
+            break
+
         frame = jpeg.tobytes()
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + frame + b'\r\n\r\n')
+
+    cap.release()
 
 
 @app.route('/video_feed')
