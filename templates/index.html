@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>Emotion Detection</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='assets/css/main.css') }}" />
+    <noscript><link rel="stylesheet" href="{{ url_for('static', filename='assets/css/noscript.css') }}" /></noscript>
+</head>
+<body class="is-preload">
+
+    <!-- Page Wrapper -->
+    <div id="page-wrapper">
+
+        <header id="header">
+    <nav id="nav">
+        <ul style="display: flex; justify-content: flex-start; list-style: none; margin: 0; padding-left: 20px;">
+            <li style="margin-right: 20px;"><a href="/">Image Emotion Detection</a></li>
+            <li><a href="/realtime">Real-Time Emotion Detection</a></li>
+        </ul>
+    </nav>
+</header>
+
+        <!-- Main -->
+        <section id="main" class="wrapper">
+            <div class="inner">
+                <header class="major">
+                    <h2>Emotion Detection Application</h2>
+                    <p>Upload an image to detect emotions.</p>
+                </header>
+                <div class="content">
+                    <header class="minor">
+                        <h3>Upload Image</h3>
+                    </header>
+                    <label for="fileInput" class="button primary fit">Choose an Image</label>
+                    <input type="file" id="fileInput" accept="image/*" style="display:none;">
+                    <div class="image-results-container" style="display: flex; align-items: flex-start;">
+                        <div class="image-preview">
+                            <img id="uploadedImage" src="#" alt="Your Image" style="display: none; border-radius: 10px;">
+                        </div>
+                        <div id="results" class="results-card" style="margin-left: 20px; padding: 20px; border-radius: 10px; display: block">
+                            <!-- Emotion results will appear here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='assets/js/jquery.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/browser.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/breakpoints.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/util.js') }}"></script>
+    <script src="{{ url_for('static', filename='assets/js/main.js') }}"></script>
+    <script>
+        const fileInput = document.getElementById('fileInput');
+        const uploadedImage = document.getElementById('uploadedImage');
+        const resultsDiv = document.getElementById('results');
+
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                uploadedImage.src = e.target.result;
+                uploadedImage.style.display = 'block';
+                detectEmotion(file);
+            };
+
+            reader.readAsDataURL(file);
+        });
+
+        function detectEmotion(file) {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            fetch('http://127.0.0.1:5000/upload', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = '';
+                if (data.length === 0) {
+                    resultsDiv.innerHTML = '<p>No emotions detected.</p>';
+                } else {
+                    data.forEach(emotion => {
+                        resultsDiv.innerHTML += `<p style="font-weight: bold; font-size: 1.2em; color: #ffffff;">${emotion.emotion}: ${emotion.confidence}</p>`;
+                    });
+                }
+            })
+            .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
