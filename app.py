@@ -8,7 +8,7 @@ app = Flask(__name__)
 CORS(app)
 
 # Load the pre-trained model
-model = load_model('D:/Projects/AIDI2001FinalProject/emotion_model_trained.h5')
+model = load_model('emotion_model_trained.h5')
 emotion_labels = ['angry', 'disgust', 'fear', 'happy', 'neutral', 'sad', 'surprise']
 face_cascade = cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
 
